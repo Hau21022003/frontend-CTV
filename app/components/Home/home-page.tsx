@@ -91,97 +91,97 @@ const HomePage: React.FC = () => {
     useState<string>("");
   const [isProvinceDisabled, setIsProvinceDisabled] = useState<boolean>(false);
 
-  useEffect(() => {
-    const storedIsAdmin = localStorage.getItem("isAdmin");
-    const storedUser = localStorage.getItem("user_info"); // Lấy thông tin người dùng lưu trữ
-    console.log("STOREDUser", storedUser);
-    const storedProvince = localStorage.getItem("province");
-    console.log("STOREDProvince", storedProvince);
-    if (storedIsAdmin !== null) {
-      setIsAdmin(storedIsAdmin === "true");
-    }
+  // useEffect(() => {
+  //   const storedIsAdmin = localStorage.getItem("isAdmin");
+  //   const storedUser = localStorage.getItem("user_info"); // Lấy thông tin người dùng lưu trữ
+  //   console.log("STOREDUser", storedUser);
+  //   const storedProvince = localStorage.getItem("province");
+  //   console.log("STOREDProvince", storedProvince);
+  //   if (storedIsAdmin !== null) {
+  //     setIsAdmin(storedIsAdmin === "true");
+  //   }
 
-    if (storedIsAdmin === "false" && storedUser) {
-      // Nếu không phải admin, lấy province từ department của storedUser
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        if (parsedUser.department && parsedUser.department.province) {
-          setSelectedProvince(parsedUser.department.province);
-          // setParentId(parsedUser.department.departmentId);
-          console.log("SELECTEDPROVINCEEEEE", selectedProvince);
-          setIsProvinceDisabled(true);
-        }
-        if (parsedUser.department?.departmentName) {
-          setSelectedDepartmentName(parsedUser.department.departmentName); // Gán đơn vị cấp 1 từ user
-          setIsDisableLv1(true); // Disable TextField đơn vị cấp 1
-        }
-      } catch (error) {
-        console.error("Lỗi parsing storedUser:", error);
-      }
-    } else if (storedIsAdmin === "true") {
-      // Nếu là admin, gọi API lấy danh sách tỉnh thành
-      apiService
-        .get("/department/find-all-province")
-        .then((response) => {
-          if (response.data && response.data.length > 0) {
-            setProvinceOptions(response.data);
-            setSelectedProvince(response.data[0].name); // Tên tỉnh
-            setSelectedProvinceId(response.data[0].idProvince); // ID tỉnh
-          }
-        })
-        .catch((error) => {
-          console.error("Lỗi khi lấy danh sách tỉnh:", error);
-        });
-    }
-  }, []);
-  useEffect(() => {
-    if (dpmId) {
-      setParentId(dpmId); // Gán parentId theo dpmId
-      apiService
-        .get(`/department/find-by-parent-id?parentId=${dpmId}`)
-        .then((response) => {
-          console.log("Danh sách đơn vị cấp 2:", response.data);
-          setDepartmentsLv2(response.data || []);
-        })
-        .catch((error) => {
-          console.error("Lỗi khi lấy danh sách đơn vị cấp 2:", error);
-          setDepartmentsLv2([]);
-        });
-    }
-  }, [dpmId]);
-  
-  useEffect(() => {
-    if (selectedProvinceId) {
-      apiService
-        .get(`/department/province-level1?province_id=${selectedProvinceId}`)
-        .then((response) => {
-          console.log("responseDPMLV1", response.data);
-          if (response.data && response.data.length > 0) {
-            setDepartmentsLv1(response.data); // Lưu danh sách đơn vị cấp 1
-          } else {
-            setDepartmentsLv1([]); // Xóa danh sách nếu không có dữ liệu
-          }
-        })
-        .catch((error) => {
-          console.error("Lỗi khi lấy danh sách đơn vị cấp 1:", error);
-          setDepartmentsLv1([]);
-        });
-    }
-  }, [selectedProvinceId]);
+  //   if (storedIsAdmin === "false" && storedUser) {
+  //     // Nếu không phải admin, lấy province từ department của storedUser
+  //     try {
+  //       const parsedUser = JSON.parse(storedUser);
+  //       if (parsedUser.department && parsedUser.department.province) {
+  //         setSelectedProvince(parsedUser.department.province);
+  //         // setParentId(parsedUser.department.departmentId);
+  //         console.log("SELECTEDPROVINCEEEEE", selectedProvince);
+  //         setIsProvinceDisabled(true);
+  //       }
+  //       if (parsedUser.department?.departmentName) {
+  //         setSelectedDepartmentName(parsedUser.department.departmentName); // Gán đơn vị cấp 1 từ user
+  //         setIsDisableLv1(true); // Disable TextField đơn vị cấp 1
+  //       }
+  //     } catch (error) {
+  //       console.error("Lỗi parsing storedUser:", error);
+  //     }
+  //   } else if (storedIsAdmin === "true") {
+  //     // Nếu là admin, gọi API lấy danh sách tỉnh thành
+  //     apiService
+  //       .get("/department/find-all-province")
+  //       .then((response) => {
+  //         if (response.data && response.data.length > 0) {
+  //           setProvinceOptions(response.data);
+  //           setSelectedProvince(response.data[0].name); // Tên tỉnh
+  //           setSelectedProvinceId(response.data[0].idProvince); // ID tỉnh
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Lỗi khi lấy danh sách tỉnh:", error);
+  //       });
+  //   }
+  // }, []);
+  // useEffect(() => {
+  //   if (dpmId) {
+  //     setParentId(dpmId); // Gán parentId theo dpmId
+  //     apiService
+  //       .get(`/department/find-by-parent-id?parentId=${dpmId}`)
+  //       .then((response) => {
+  //         console.log("Danh sách đơn vị cấp 2:", response.data);
+  //         setDepartmentsLv2(response.data || []);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Lỗi khi lấy danh sách đơn vị cấp 2:", error);
+  //         setDepartmentsLv2([]);
+  //       });
+  //   }
+  // }, [dpmId]);
 
-  const handleProvinceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const provinceName = event.target.value;
-    const selected = provinceOptions.find((p) => p.name === provinceName);
-    if (selected) {
-      setSelectedProvince(selected.name);
-      setSelectedProvinceId(selected.idProvince);
-      setDepartmentsLv1([]);
-      setSelectedDepartmentName("");
-      setDepartmentsLv2([]);
-      setSelectedDepartmentNameLv2("");
-    }
-    console.log("SELECTED", selected?.idProvince);
-  };
+  // useEffect(() => {
+  //   if (selectedProvinceId) {
+  //     apiService
+  //       .get(`/department/province-level1?province_id=${selectedProvinceId}`)
+  //       .then((response) => {
+  //         console.log("responseDPMLV1", response.data);
+  //         if (response.data && response.data.length > 0) {
+  //           setDepartmentsLv1(response.data); // Lưu danh sách đơn vị cấp 1
+  //         } else {
+  //           setDepartmentsLv1([]); // Xóa danh sách nếu không có dữ liệu
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("Lỗi khi lấy danh sách đơn vị cấp 1:", error);
+  //         setDepartmentsLv1([]);
+  //       });
+  //   }
+  // }, [selectedProvinceId]);
+
+  // const handleProvinceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const provinceName = event.target.value;
+  //   const selected = provinceOptions.find((p) => p.name === provinceName);
+  //   if (selected) {
+  //     setSelectedProvince(selected.name);
+  //     setSelectedProvinceId(selected?.idProvince);
+  //     setDepartmentsLv1([]);
+  //     setSelectedDepartmentName("");
+  //     setDepartmentsLv2([]);
+  //     setSelectedDepartmentNameLv2("");
+  //   }
+  //   console.log("SELECTED", selected?.name);
+  // };
 
   // const [permissions, setPermissions] = useState<any[]>([]);
   // useEffect(() => {
@@ -219,87 +219,87 @@ const HomePage: React.FC = () => {
   //   }
   // }, []);
 
-  // const fetchProvinceDepartmentUser = async (id: string) => {
-  //   try {
-  //     let isDepartChild = false;
-  //     setIsLoading(true);
+  const fetchProvinceDepartmentUser = async (id: string) => {
+    try {
+      let isDepartChild = false;
+      setIsLoading(true);
 
-  //     const resPro: any = await apiService.get("user/province");
-  //     const province = resPro.data.data;
-  //     if (province.name) {
-  //       setProvince({ key: province.key, name: province.name });
-  //       setIsDisableProvince(true);
-  //     }
-  //     const resDpParent: any = await apiService.get(
-  //       "department/parent-department-user"
-  //     );
-  //     const dpParent = resDpParent.data.data;
+      const resPro: any = await apiService.get("user/province");
+      const province = resPro.data.data;
+      if (province.name) {
+        setProvince({ id: province.key, name: province.name });
+        setIsDisableProvince(true);
+      }
+      const resDpParent: any = await apiService.get(
+        "department/parent-department-user"
+      );
+      const dpParent = resDpParent.data.data;
 
-  //     const lv1 = dpParent.filter(
-  //       (department: Department) => department.level === 1
-  //     );
-  //     const lv2 = dpParent.filter(
-  //       (department: Department) => department.level === 2
-  //     );
-  //     const lv3 = dpParent.filter(
-  //       (department: Department) => department.level === 3
-  //     );
-  //     const lv4 = dpParent.filter(
-  //       (department: Department) => department.level === 4
-  //     );
+      const lv1 = dpParent.filter(
+        (department: Department) => department.level === 1
+      );
+      const lv2 = dpParent.filter(
+        (department: Department) => department.level === 2
+      );
+      const lv3 = dpParent.filter(
+        (department: Department) => department.level === 3
+      );
+      const lv4 = dpParent.filter(
+        (department: Department) => department.level === 4
+      );
 
-  //     if (lv1.length > 0) {
-  //       setDpmLv1({ key: lv1[0].id, name: lv1[0].name });
-  //       setDepartmentsLv1(lv1);
-  //       // setChoosed({ key: lv1[0].id, name: lv1[0].name });
+      if (lv1.length > 0) {
+        setDpmLv1({ id: lv1[0].id, name: lv1[0].name });
+        setDepartmentsLv1(lv1);
+        // setChoosed({ key: lv1[0].id, name: lv1[0].name });
 
-  //       setIsDisableLv1(true);
-  //     } else if (!isDepartChild) {
-  //       const respChil1: any = await apiService.get(
-  //         `department/children-department-user?level=1`
-  //       );
-  //       let lv1 = respChil1.data.data;
-  //       setDepartmentsLv1(lv1);
-  //       isDepartChild = true;
-  //     }
-  //     if (lv2.length > 0) {
-  //       setDpmLv2({ key: lv2[0].id, name: lv2[0].name });
-  //       setDepartmentsLv2(lv2);
-  //       setIsDisableLv2(true);
-  //       // setChoosed({ key: lv2[0].id, name: lv2[0].name });
-  //     } else if (!isDepartChild) {
-  //       const respChil2: any = await apiService.get(
-  //         `department/children-department-user?level=2`
-  //       );
-  //       let lv2 = respChil2.data.data;
-  //       setDepartmentsLv2(lv2);
-  //       isDepartChild = true;
-  //     }
-  //     if (lv3.length > 0) {
-  //       setDpmLv3({ key: lv3[0].id, name: lv3[0].name });
-  //       setDepartmentsLv3(lv3);
-  //       setIsDisableLv3(true);
-  //       // setChoosed({ key: lv3[0].id, name: lv3[0].name });
-  //     } else if (!isDepartChild) {
-  //       const respChil3: any = await apiService.get(
-  //         `department/children-department-user?level=3`
-  //       );
-  //       let lv3 = respChil3.data.data;
-  //       setDepartmentsLv3(lv3);
-  //       isDepartChild = true;
-  //     }
-  //     if (lv4.length > 0) {
-  //       setDpmLv4({ key: lv4[0].id, name: lv4[0].name });
-  //       setDepartmentsLv4(lv4);
-  //       setIsDisableLv4(true);
-  //       // setChoosed({ key: lv4[0].id, name: lv4[0].name });
-  //     }
-  //   } catch (error) {
-  //     console.error("Failed to fetch province and departments:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+        setIsDisableLv1(true);
+      } else if (!isDepartChild) {
+        const respChil1: any = await apiService.get(
+          `department/children-department-user?level=1`
+        );
+        let lv1 = respChil1.data.data;
+        setDepartmentsLv1(lv1);
+        isDepartChild = true;
+      }
+      if (lv2.length > 0) {
+        setDpmLv2({ id: lv2[0].id, name: lv2[0].name });
+        setDepartmentsLv2(lv2);
+        setIsDisableLv2(true);
+        // setChoosed({ key: lv2[0].id, name: lv2[0].name });
+      } else if (!isDepartChild) {
+        const respChil2: any = await apiService.get(
+          `department/children-department-user?level=2`
+        );
+        let lv2 = respChil2.data.data;
+        setDepartmentsLv2(lv2);
+        isDepartChild = true;
+      }
+      if (lv3.length > 0) {
+        setDpmLv3({ id: lv3[0].id, name: lv3[0].name });
+        setDepartmentsLv3(lv3);
+        setIsDisableLv3(true);
+        // setChoosed({ key: lv3[0].id, name: lv3[0].name });
+      } else if (!isDepartChild) {
+        const respChil3: any = await apiService.get(
+          `department/children-department-user?level=3`
+        );
+        let lv3 = respChil3.data.data;
+        setDepartmentsLv3(lv3);
+        isDepartChild = true;
+      }
+      if (lv4.length > 0) {
+        setDpmLv4({ id: lv4[0].id, name: lv4[0].name });
+        setDepartmentsLv4(lv4);
+        setIsDisableLv4(true);
+        // setChoosed({ key: lv4[0].id, name: lv4[0].name });
+      }
+    } catch (error) {
+      console.error("Failed to fetch province and departments:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // const hasPermission = (subject: string, action: string) => {
   //   const permission = permissions.find((perm) => perm.subject === subject);
@@ -309,6 +309,13 @@ const HomePage: React.FC = () => {
     setOpenDialog(true);
   };
 
+  // const [selectedProvinceForDialog, setSelectedProvinceForDialog] =
+  //   useState<string>("");
+
+  // const handleOpenDialog = () => {
+  //   setSelectedProvinceForDialog(selectedProvince); // Lưu tỉnh thành hiện tại vào state
+  //   setOpenDialog(true);
+  // };
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setRefreshTable((prev) => !prev);
@@ -337,27 +344,100 @@ const HomePage: React.FC = () => {
   //   event: React.ChangeEvent<HTMLInputElement>
   // ) => {
   //   const selectedProvinceName = event.target.value;
+  //   console.log("SELECTEDPROVINCENAME", selectedProvinceName);
   //   const selectedProvince = cities.find(
   //     (city) => city.name === selectedProvinceName
   //   );
-  //   if (selectedProvince) {
-  //     setRefreshTable(() => !refreshOptions);
-  //     //   setIsDisableAddNewButton(false);
-  //     setProvince({ key: selectedProvince.key, name: selectedProvince.name });
-  //     await fetchDepartments(
-  //       `/department/level1/${selectedProvince.key}`,
-  //       setDepartmentsLv1
+  //   console.log("SELECTEDPROVINCE....", selectedProvince);
+
+  //   if (!selectedProvince) return;
+
+  //   setProvince({ id: selectedProvince.id, name: selectedProvince.name });
+  //   setSelectedProvinceId(selectedProvince.id);
+
+  //   try {
+  //     setIsLoading(true);
+  //     console.log("selectedProvince.id:", selectedProvince?.id);
+
+  //     const response = await apiService.get(
+  //       `/department/province-level1?province_id=${selectedProvince?.id}`
   //     );
-  //     setDpmLv1({ key: "", name: "" });
-  //     setDpmLv2({ key: "", name: "" });
-  //     setDpmLv3({ key: "", name: "" });
-  //     setDpmLv4({ key: "", name: "" });
-  //     setDepartmentsLv2([]);
-  //     setDepartmentsLv3([]);
-  //     setDepartmentsLv4([]);
-  //     setCurrLevel(1);
+  //     console.log("responseDPMLV1", response);
+  //     if (response.data) {
+  //       setDepartmentsLv1(response.data);
+  //     } else {
+  //       setDepartmentsLv1([]);
+  //     }
+  //   } catch (error) {
+  //     console.error("Lỗi khi lấy danh sách đơn vị cấp 1:", error);
+  //     setDepartmentsLv1([]);
+  //   } finally {
+  //     setIsLoading(false);
   //   }
+
+  //   // Reset các đơn vị cấp thấp hơn
+  //   setDpmLv1({ id: "", name: "" });
+  //   setDpmLv2({ id: "", name: "" });
+  //   setDpmLv3({ id: "", name: "" });
+  //   setDpmLv4({ id: "", name: "" });
+  //   setDepartmentsLv2([]);
+  //   setDepartmentsLv3([]);
+  //   setDepartmentsLv4([]);
   // };
+
+  const handleProvinceChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedProvinceName = event.target.value;
+    console.log("SELECTEDPROVINCENAME", selectedProvinceName);
+
+    // Tìm tỉnh/thành phố dựa vào name
+    const selectedProvince = cities.find(
+      (city) => city.name === selectedProvinceName
+    );
+    console.log("SELECTEDPROVINCE....", selectedProvince);
+
+    if (!selectedProvince) return;
+
+    // Cập nhật state với idProvince
+    setProvince({
+      id: selectedProvince.idProvince,
+      name: selectedProvince.name,
+    });
+    setSelectedProvinceId(selectedProvince.idProvince);
+
+    try {
+      setIsLoading(true);
+      console.log("selectedProvince.idProvince:", selectedProvince?.idProvince);
+
+      // Gọi API với idProvince
+      const response = await apiService.get(
+        `/department/province-level1?province_id=${selectedProvince?.idProvince}`
+      );
+      console.log("responseDPMLV1", response);
+
+      if (response.data) {
+        setDepartmentsLv1(response.data);
+      } else {
+        setDepartmentsLv1([]);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách đơn vị cấp 1:", error);
+      setDepartmentsLv1([]);
+    } finally {
+      setIsLoading(false);
+    }
+
+    // Reset các đơn vị cấp thấp hơn
+    setDpmLv1({ id: "", name: "" });
+    setDpmLv2({ id: "", name: "" });
+    setDpmLv3({ id: "", name: "" });
+    setDpmLv4({ id: "", name: "" });
+    setDepartmentsLv2([]);
+    setDepartmentsLv3([]);
+    setDepartmentsLv4([]);
+  };
+
   // const handleDeparmentLevel1Change = async () => {
   //   if (!selectedProvinceId) return;
 
@@ -365,7 +445,7 @@ const HomePage: React.FC = () => {
   //     const response = await apiService.get(
   //       `/department/province-level1?province_id=${selectedProvinceId}`
   //     );
-  //     console.log("dpmLV1",response.data)
+  //     console.log("dpmLV1", response.data);
   //     if (response.data && response.data.length > 0) {
   //       setDepartmentsLv1(response.data); // Chỉ lưu danh sách cấp 1
   //     } else {
@@ -395,7 +475,7 @@ const HomePage: React.FC = () => {
   //     setSelectedDepartmentNameLv3("");
   //     setDepartmentsLv4([]);
   //     setSelectedDepartmentNameLv4("");
-  
+
   //     // Gọi API để lấy danh sách đơn vị cấp 2
   //     try {
   //       const response = await apiService.get(
@@ -415,102 +495,102 @@ const HomePage: React.FC = () => {
   //     setSelectedDepartmentNameLv2("");
   //   }
   // };
-  const handleDepartmentLv1Change = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedDepartmentName = event.target.value;
-    const selectedDepartment = departmentsLv1.find(
-      (dept) => dept.departmentName === selectedDepartmentName
-    );
-  
-    if (selectedDepartment) {
-      setParentId(selectedDepartment.departmentId);
-      setSelectedDepartmentName(selectedDepartment.departmentName);
-  
-      // Reset danh sách đơn vị cấp 2, 3, 4
-      setDepartmentsLv2([]);
-      setSelectedDepartmentNameLv2("");
-      setDepartmentsLv3([]);
-      setSelectedDepartmentNameLv3("");
-      setDepartmentsLv4([]);
-      setSelectedDepartmentNameLv4("");
-  
-      // Lấy danh sách đơn vị cấp 2
-      try {
-        const response = await apiService.get(
-          `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
-        );
-        console.log("Danh sách đơn vị cấp 2:", response.data);
-        setDepartmentsLv2(response.data || []);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách đơn vị cấp 2:", error);
-        setDepartmentsLv2([]);
-      }
-    } else {
-      setDepartmentsLv2([]);
-      setSelectedDepartmentNameLv2("");
-    }
-  };
-  
-  const handleDepartmentLv2Change = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedDepartmentName = event.target.value;
-    const selectedDepartment = departmentsLv2.find(
-      (dept) => dept.departmentName === selectedDepartmentName
-    );
-  
-    if (selectedDepartment) {
-      setParentId(selectedDepartment.departmentId);
-      setSelectedDepartmentNameLv2(selectedDepartment.departmentName);
-  
-      // Xóa danh sách đơn vị cấp 3, 4
-      setDepartmentsLv3([]);
-      setSelectedDepartmentNameLv3("");
-      setDepartmentsLv4([]);
-      setSelectedDepartmentNameLv4("");
-  
-      // Gọi API để tải đơn vị cấp 3 theo parentId
-      try {
-        const response = await apiService.get(
-          `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
-        );
-        setDepartmentsLv3(response.data || []);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách đơn vị cấp 3:", error);
-        setDepartmentsLv3([]);
-      }
-    }
-  };
-  const handleDepartmentLv3Change = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedDepartmentName = event.target.value;
-    const selectedDepartment = departmentsLv3.find(
-      (dept) => dept.departmentName === selectedDepartmentName
-    );
-  
-    if (selectedDepartment) {
-      setParentId(selectedDepartment.departmentId);
-      setSelectedDepartmentNameLv3(selectedDepartment.departmentName);
-      // Xóa danh sách đơn vị cấp 4
-      setDepartmentsLv4([]);
-      setSelectedDepartmentNameLv4("");
-  
-      // Gọi API để tải đơn vị cấp 4 theo parentId
-      try {
-        const response = await apiService.get(
-          `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
-        );
-        setDepartmentsLv4(response.data || []);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách đơn vị cấp 4:", error);
-        setDepartmentsLv4([]);
-      }
-    }
-  };
+  // const handleDepartmentLv1Change = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const selectedDepartmentName = event.target.value;
+  //   const selectedDepartment = departmentsLv1.find(
+  //     (dept) => dept.departmentName === selectedDepartmentName
+  //   );
 
-  console.log("SELECTEDDPMN", selectedDepartmentName);
+  //   if (selectedDepartment) {
+  //     setParentId(selectedDepartment.departmentId);
+  //     setSelectedDepartmentName(selectedDepartment.departmentName);
+
+  //     // Reset danh sách đơn vị cấp 2, 3, 4
+  //     setDepartmentsLv2([]);
+  //     setSelectedDepartmentNameLv2("");
+  //     setDepartmentsLv3([]);
+  //     setSelectedDepartmentNameLv3("");
+  //     setDepartmentsLv4([]);
+  //     setSelectedDepartmentNameLv4("");
+
+  //     // Lấy danh sách đơn vị cấp 2
+  //     try {
+  //       const response = await apiService.get(
+  //         `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
+  //       );
+  //       console.log("Danh sách đơn vị cấp 2:", response.data);
+  //       setDepartmentsLv2(response.data || []);
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy danh sách đơn vị cấp 2:", error);
+  //       setDepartmentsLv2([]);
+  //     }
+  //   } else {
+  //     setDepartmentsLv2([]);
+  //     setSelectedDepartmentNameLv2("");
+  //   }
+  // };
+
+  // const handleDepartmentLv2Change = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const selectedDepartmentName = event.target.value;
+  //   const selectedDepartment = departmentsLv2.find(
+  //     (dept) => dept.departmentName === selectedDepartmentName
+  //   );
+
+  //   if (selectedDepartment) {
+  //     setParentId(selectedDepartment.departmentId);
+  //     setSelectedDepartmentNameLv2(selectedDepartment.departmentName);
+
+  //     // Xóa danh sách đơn vị cấp 3, 4
+  //     setDepartmentsLv3([]);
+  //     setSelectedDepartmentNameLv3("");
+  //     setDepartmentsLv4([]);
+  //     setSelectedDepartmentNameLv4("");
+
+  //     // Gọi API để tải đơn vị cấp 3 theo parentId
+  //     try {
+  //       const response = await apiService.get(
+  //         `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
+  //       );
+  //       setDepartmentsLv3(response.data || []);
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy danh sách đơn vị cấp 3:", error);
+  //       setDepartmentsLv3([]);
+  //     }
+  //   }
+  // };
+  // const handleDepartmentLv3Change = async (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const selectedDepartmentName = event.target.value;
+  //   const selectedDepartment = departmentsLv3.find(
+  //     (dept) => dept.departmentName === selectedDepartmentName
+  //   );
+
+  //   if (selectedDepartment) {
+  //     setParentId(selectedDepartment.departmentId);
+  //     setSelectedDepartmentNameLv3(selectedDepartment.departmentName);
+  //     // Xóa danh sách đơn vị cấp 4
+  //     setDepartmentsLv4([]);
+  //     setSelectedDepartmentNameLv4("");
+
+  //     // Gọi API để tải đơn vị cấp 4 theo parentId
+  //     try {
+  //       const response = await apiService.get(
+  //         `/department/find-by-parent-id?parentId=${selectedDepartment.departmentId}`
+  //       );
+  //       setDepartmentsLv4(response.data || []);
+  //     } catch (error) {
+  //       console.error("Lỗi khi lấy danh sách đơn vị cấp 4:", error);
+  //       setDepartmentsLv4([]);
+  //     }
+  //   }
+  // };
+
+  // console.log("SELECTEDDPMN", selectedDepartmentName);
 
   const handleDepartmentChange =
     (
@@ -586,35 +666,35 @@ const HomePage: React.FC = () => {
     }
   };
 
-  // useEffect(() => {
-  //   const fetchAllData = async () => {
-  //     if (province.key) {
-  //       await fetchDepartments(
-  //         `/department/level1/${province.key}`,
-  //         setDepartmentsLv1
-  //       );
-  //     }
-  //     if (dpmLv1.key) {
-  //       await fetchDepartments(
-  //         `/department/level-2-3-4?currLevel=2&parentId=${dpmLv1.key}`,
-  //         setDepartmentsLv2
-  //       );
-  //     }
-  //     if (dpmLv2.key) {
-  //       await fetchDepartments(
-  //         `/department/level-2-3-4?currLevel=3&parentId=${dpmLv2.key}`,
-  //         setDepartmentsLv3
-  //       );
-  //     }
-  //     if (dpmLv3.key) {
-  //       await fetchDepartments(
-  //         `/department/level-2-3-4?currLevel=4&parentId=${dpmLv3.key}`,
-  //         setDepartmentsLv4
-  //       );
-  //     }
-  //   };
-  //   fetchAllData();
-  // }, [refreshOptions, refreshDelete]);
+  useEffect(() => {
+    const fetchAllData = async () => {
+      if (province.id) {
+        await fetchDepartments(
+          `/department/province-level1?province_id=${province.id}`,
+          setDepartmentsLv1
+        );
+      }
+      if (dpmLv1.id) {
+        await fetchDepartments(
+          `/department/province-level1?province_id=${dpmLv1.id}`,
+          setDepartmentsLv2
+        );
+      }
+      if (dpmLv2.id) {
+        await fetchDepartments(
+          `/department/find-by-parent-id?parentId=${dpmLv2.id}`,
+          setDepartmentsLv3
+        );
+      }
+      if (dpmLv3.id) {
+        await fetchDepartments(
+          `/department/find-by-parent-id?parentId=${dpmLv3.id}`,
+          setDepartmentsLv4
+        );
+      }
+    };
+    fetchAllData();
+  }, [refreshOptions, refreshDelete]);
 
   return (
     <Layout>
@@ -654,26 +734,26 @@ const HomePage: React.FC = () => {
             <Box
               sx={{ display: "flex", flex: 1, justifyContent: "space-between" }}
             >
-              {/* <TextField
+              <TextField
                 select
                 label="Thành phố/Tỉnh thành"
                 value={province.name}
                 onChange={handleProvinceChange}
                 sx={{ flex: 1, marginRight: 2 }}
-                disabled={
-                  !hasPermission("department", "view") || isDisableProvince
-                }
+                // disabled={
+                //   !hasPermission("department", "view") || isDisableProvince
+                // }
               >
                 {cities
                   .slice()
                   .reverse()
                   .map((city) => (
-                    <MenuItem key={city.key} value={city.name}>
+                    <MenuItem key={city.id} value={city.name}>
                       {city.name}
                     </MenuItem>
                   ))}
-              </TextField> */}
-              <TextField
+              </TextField>
+              {/* <TextField
                 label="Tỉnh/Thành phố"
                 value={
                   isAdmin === false ? provinceName || "" : selectedProvince
@@ -690,27 +770,28 @@ const HomePage: React.FC = () => {
                     {province.name}
                   </MenuItem>
                 ))}
-              </TextField>
+              </TextField> */}
 
               <TextField
-                select={!isDisableLv1}
+                // select={!isDisableLv1}
+                select
                 label="Đơn vị cấp 1"
-                // value={dpmLv1.name}
-                value={
-                  isAdmin === false
-                    ? departmentName || ""
-                    : selectedDepartmentName
-                }
-                // onChange={handleDepartmentChange(
-                //   setDpmLv1,
-                //   setDepartmentsLv2,
-                //   setDepartmentsLv3,
-                //   `/department/level-2-3-4?currLevel=2&parentId={$id}`,
-                //   departmentsLv1,
-                //   2
-                // )}
+                value={dpmLv1.name || ""}
+                // value={
+                //   isAdmin === false
+                //     ? departmentName || ""
+                //     : selectedDepartmentName
+                // }
+                onChange={handleDepartmentChange(
+                  setDpmLv1,
+                  setDepartmentsLv2,
+                  setDepartmentsLv3,
+                  `/department/level-2-3-4?currLevel=2&parentId={$id}`,
+                  departmentsLv1,
+                  2
+                )}
                 // onChange={(e) => setSelectedDepartmentName(e.target.value)}
-                onChange={handleDepartmentLv1Change}
+                // onChange={handleDepartmentLv1Change}
                 sx={{ flex: 1, marginRight: 2 }}
                 // disabled={!province.name || isDisableLv1}
                 disabled={isDisableLv1}
@@ -738,17 +819,17 @@ const HomePage: React.FC = () => {
               <TextField
                 select
                 label="Đơn vị cấp 2"
-                // value={dpmLv2.name}
-                // onChange={handleDepartmentChange(
-                //   setDpmLv2,
-                //   setDepartmentsLv3,
-                //   setDepartmentsLv4,
-                //   `/department/level-2-3-4?currLevel=3&parentId={$id}`,
-                //   departmentsLv2,
-                //   3
-                // )}
-                value={selectedDepartmentNameLv2}
-                onChange={(handleDepartmentLv2Change)}
+                value={dpmLv2.name}
+                onChange={handleDepartmentChange(
+                  setDpmLv2,
+                  setDepartmentsLv3,
+                  setDepartmentsLv4,
+                  `/department/level-2-3-4?currLevel=3&parentId={$id}`,
+                  departmentsLv2,
+                  3
+                )}
+                // value={selectedDepartmentNameLv2}
+                // onChange={handleDepartmentLv2Change}
                 sx={{ flex: 1, marginRight: 2 }}
                 // disabled={!dpmLv1.name || isDisableLv2}
                 InputProps={{
@@ -775,17 +856,17 @@ const HomePage: React.FC = () => {
               <TextField
                 select
                 label="Đơn vị cấp 3"
-                // value={dpmLv3.name}
-                // onChange={handleDepartmentChange(
-                //   setDpmLv3,
-                //   setDepartmentsLv4,
-                //   () => {},
-                //   `/department/level-2-3-4?currLevel=4&parentId={$id}`,
-                //   departmentsLv3,
-                //   4
-                // )}
-                value={selectedDepartmentNameLv3}
-                onChange={(handleDepartmentLv3Change)}
+                value={dpmLv3.name}
+                onChange={handleDepartmentChange(
+                  setDpmLv3,
+                  setDepartmentsLv4,
+                  () => {},
+                  `/department/level-2-3-4?currLevel=4&parentId={$id}`,
+                  departmentsLv3,
+                  4
+                )}
+                // value={selectedDepartmentNameLv3}
+                // onChange={handleDepartmentLv3Change}
                 sx={{ flex: 1, marginRight: 2 }}
                 // disabled={!dpmLv2.name || isDisableLv3}
                 InputProps={{
@@ -801,7 +882,10 @@ const HomePage: React.FC = () => {
               >
                 {departmentsLv3 &&
                   departmentsLv3.map((dept) => (
-                    <MenuItem key={dept.departmentId} value={dept.departmentName}>
+                    <MenuItem
+                      key={dept.departmentId}
+                      value={dept.departmentName}
+                    >
                       {dept.departmentName}
                     </MenuItem>
                   ))}
@@ -809,17 +893,17 @@ const HomePage: React.FC = () => {
               <TextField
                 select
                 label="Đơn vị cấp 4"
-                // value={dpmLv4.name}
-                // onChange={handleDepartmentChange(
-                //   setDpmLv4,
-                //   () => {},
-                //   () => {},
-                //   `/department/level-2-3-4?currLevel=5&parentId={$id}`,
-                //   departmentsLv4,
-                //   5
-                // )}
-                value={selectedDepartmentNameLv4}
-                onChange={(e) => setSelectedDepartmentNameLv4(e.target.value)}
+                value={dpmLv4.name}
+                onChange={handleDepartmentChange(
+                  setDpmLv4,
+                  () => {},
+                  () => {},
+                  `/department/level-2-3-4?currLevel=5&parentId={$id}`,
+                  departmentsLv4,
+                  5
+                )}
+                // value={selectedDepartmentNameLv4}
+                // onChange={(e) => setSelectedDepartmentNameLv4(e.target.value)}
                 sx={{ flex: 1 }}
                 // disabled={!dpmLv3.name || isDisableLv4}
                 InputProps={{
@@ -835,7 +919,10 @@ const HomePage: React.FC = () => {
               >
                 {departmentsLv4 &&
                   departmentsLv4.map((dept) => (
-                    <MenuItem key={dept.departmentId} value={dept.departmentName}>
+                    <MenuItem
+                      key={dept.departmentId}
+                      value={dept.departmentName}
+                    >
                       {dept.departmentName}
                     </MenuItem>
                   ))}

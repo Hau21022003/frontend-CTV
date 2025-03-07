@@ -51,14 +51,14 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
   } = useAppContext();
 
   const [localProvince, setLocalProvince] = useState<Location>({
-    key: "",
+    id: "",
     name: "",
   });
   const [localDistrict, setLocalDistrict] = useState<Location>({
-    key: "",
+    id: "",
     name: "",
   });
-  const [localWard, setLocalWard] = useState<Location>({ key: "", name: "" });
+  const [localWard, setLocalWard] = useState<Location>({ id: "", name: "" });
   const [localName, setLocalName] = useState("");
   const [localParentId, setLocalParentId] = useState<number | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -72,28 +72,28 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
 
   useEffect(() => {
     if (open) {
-      setLocalProvince({ key: province.key, name: province.name });
-      fetchDistrict(province.key);
-      setLocalDistrict({ key: "", name: "" });
-      setLocalWard({ key: "", name: "" });
+      setLocalProvince({ id: province.id, name: province.name });
+      fetchDistrict(province.id);
+      setLocalDistrict({ id: "", name: "" });
+      setLocalWard({ id: "", name: "" });
       setLocalName("");
       setLocalParentId(null);
     }
   }, [open, province]);
   const determineLevelAndParentId = () => {
-    if (dpmLv1.key === "" && dpmLv1.name === "") {
+    if (dpmLv1.id === "" && dpmLv1.name === "") {
       return { level: 1, parentId: null };
     }
-    if (dpmLv2.key === "" && dpmLv2.name === "") {
-      return { level: 2, parentId: parseInt(dpmLv1.key, 10) };
+    if (dpmLv2.id === "" && dpmLv2.name === "") {
+      return { level: 2, parentId: parseInt(dpmLv1.id, 10) };
     }
-    if (dpmLv3.key === "" && dpmLv3.name === "") {
-      return { level: 3, parentId: parseInt(dpmLv2.key, 10) };
+    if (dpmLv3.id === "" && dpmLv3.name === "") {
+      return { level: 3, parentId: parseInt(dpmLv2.id, 10) };
     }
-    if (dpmLv4.key === "" && dpmLv4.name === "") {
-      return { level: 4, parentId: parseInt(dpmLv3.key, 10) };
+    if (dpmLv4.id === "" && dpmLv4.name === "") {
+      return { level: 4, parentId: parseInt(dpmLv3.id, 10) };
     }
-    return { level: 5, parentId: parseInt(dpmLv4.key, 10) };
+    return { level: 5, parentId: parseInt(dpmLv4.id, 10) };
   };
 
   const handleSave = async () => {
@@ -139,12 +139,12 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
     );
     if (selectedProvince) {
       setLocalProvince({
-        key: selectedProvince.key,
+        id: selectedProvince.id,
         name: selectedProvinceName,
       });
-      setLocalDistrict({ key: "", name: "" });
-      setLocalWard({ key: "", name: "" });
-      await fetchDistrict(selectedProvince.key);
+      setLocalDistrict({ id: "", name: "" });
+      setLocalWard({ id: "", name: "" });
+      await fetchDistrict(selectedProvince.id);
     }
   };
 
@@ -155,11 +155,11 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
     );
     if (selectedDistrict) {
       setLocalDistrict({
-        key: selectedDistrict.key,
+        id: selectedDistrict.id,
         name: selectedDistrictName,
       });
-      setLocalWard({ key: "", name: "" });
-      await fetchWard(selectedDistrict.key);
+      setLocalWard({ id: "", name: "" });
+      await fetchWard(selectedDistrict.id);
     }
   };
 
@@ -167,7 +167,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
     const selectedWardName = event.target.value;
     const selectedWard = wards.find((ward) => ward.name === selectedWardName);
     if (selectedWard) {
-      setLocalWard({ key: selectedWard.key, name: selectedWardName });
+      setLocalWard({ id: selectedWard.id, name: selectedWardName });
     }
   };
 
@@ -215,7 +215,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
                   .slice()
                   .reverse()
                   .map((city) => (
-                    <MenuItem key={city.key} value={city.name}>
+                    <MenuItem key={city.id} value={city.name}>
                       {city.name}
                     </MenuItem>
                   ))}
@@ -237,7 +237,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
               >
                 {districts &&
                   districts.map((district) => (
-                    <MenuItem key={district.key} value={district.name}>
+                    <MenuItem key={district.id} value={district.name}>
                       {district.name}
                     </MenuItem>
                   ))}
@@ -251,7 +251,7 @@ const DialogPopup: React.FC<DialogPopupProps> = ({
               >
                 {wards &&
                   wards.map((ward) => (
-                    <MenuItem key={ward.key} value={ward.name}>
+                    <MenuItem key={ward.id} value={ward.name}>
                       {ward.name}
                     </MenuItem>
                   ))}
