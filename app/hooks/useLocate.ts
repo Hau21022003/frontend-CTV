@@ -3,15 +3,15 @@ import apiService from '../untils/api';
 import { useAuth } from './AuthContext';
 
 interface City {
-  key: string;
+  id: string;
   name: string;
 }
 interface District {
-  key: string;
+  id: string;
   name: string;
 }
 interface Ward {
-  key: string;
+  id: string;
   name: string;
 }
 

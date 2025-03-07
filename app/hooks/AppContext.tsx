@@ -2,8 +2,8 @@
 import React, { createContext, useContext, useState } from 'react';
 
 export interface Location {
-  key: string;
-  name: string;
+  id?: string;
+  name?: string;
 }
 
 interface Department {
@@ -69,16 +69,16 @@ interface AppState {
 const AppContext = createContext<AppState | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [province, setProvince] = useState<Location>({ key: '', name: '' });
-  const [district, setDistrict] = useState<Location>({ key: '', name: '' });
-  const [choosed, setChoosed] = useState<Location>({ key: '', name: '' });
-  const [ward, setWard] = useState<Location>({ key: '', name: '' });
+  const [province, setProvince] = useState<Location>({ id: '', name: '' });
+  const [district, setDistrict] = useState<Location>({ id: '', name: '' });
+  const [choosed, setChoosed] = useState<Location>({ id: '', name: '' });
+  const [ward, setWard] = useState<Location>({ id: '', name: '' });
   const [name, setName] = useState<string>('');
   const [level, setLevel] = useState<number>(0);
-  const [dpmLv1, setDpmLv1] = useState<Location>({ key: '', name: '' });
-  const [dpmLv2, setDpmLv2] = useState<Location>({ key: '', name: '' });
-  const [dpmLv3, setDpmLv3] = useState<Location>({ key: '', name: '' });
-  const [dpmLv4, setDpmLv4] = useState<Location>({ key: '', name: '' });
+  const [dpmLv1, setDpmLv1] = useState<Location>({ id: '', name: '' });
+  const [dpmLv2, setDpmLv2] = useState<Location>({ id: '', name: '' });
+  const [dpmLv3, setDpmLv3] = useState<Location>({ id: '', name: '' });
+  const [dpmLv4, setDpmLv4] = useState<Location>({ id: '', name: '' });
   const [roles, setRoles] = useState<Role[]>([])
   const [reportId, setReportId] = useState('');
   const [refreshAddNew, setRefreshAddNew] = useState<boolean>(false);

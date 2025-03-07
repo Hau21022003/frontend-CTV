@@ -61,50 +61,50 @@ const SideBar: React.FC<SideBarProps> = ({
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
     null
   );
-  const [permissions, setPermissions] = useState<any[]>([]);
-  const parsePermissions = (storedPermissions: string | null) => {
-    try {
-      const parsedPermissions = JSON.parse(storedPermissions || "{}");
-      if (Array.isArray(parsedPermissions)) {
-        return parsedPermissions;
-      } else if (typeof parsedPermissions === "object") {
-        return Object.entries(parsedPermissions).map(
-          ([subject, permission]) => ({
-            subject,
-            permission,
-          })
-        );
-      } else {
-        console.error(
-          "Permissions are not in the expected array or object format:",
-          parsedPermissions
-        );
-        return [];
-      }
-    } catch (error) {
-      console.error("Failed to parse stored permissions:", error);
-      return [];
-    }
-  };
+  // const [permissions, setPermissions] = useState<any[]>([]);
+  // const parsePermissions = (storedPermissions: string | null) => {
+  //   try {
+  //     const parsedPermissions = JSON.parse(storedPermissions || "{}");
+  //     if (Array.isArray(parsedPermissions)) {
+  //       return parsedPermissions;
+  //     } else if (typeof parsedPermissions === "object") {
+  //       return Object.entries(parsedPermissions).map(
+  //         ([subject, permission]) => ({
+  //           subject,
+  //           permission,
+  //         })
+  //       );
+  //     } else {
+  //       console.error(
+  //         "Permissions are not in the expected array or object format:",
+  //         parsedPermissions
+  //       );
+  //       return [];
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to parse stored permissions:", error);
+  //     return [];
+  //   }
+  // };
 
-  useEffect(() => {
-    const storedPermissions = localStorage.getItem("permissions");
-    setPermissions(
-      storedPermissions ? parsePermissions(storedPermissions) : []
-    );
-  }, []);
+  // useEffect(() => {
+  //   const storedPermissions = localStorage.getItem("permissions");
+  //   setPermissions(
+  //     storedPermissions ? parsePermissions(storedPermissions) : []
+  //   );
+  // }, []);
 
-  useEffect(() => {
-    const storedPermissions = localStorage.getItem("permissions");
-    setPermissions(
-      storedPermissions ? parsePermissions(storedPermissions) : []
-    );
-  }, [isEditing]);
+  // useEffect(() => {
+  //   const storedPermissions = localStorage.getItem("permissions");
+  //   setPermissions(
+  //     storedPermissions ? parsePermissions(storedPermissions) : []
+  //   );
+  // }, [isEditing]);
 
-  const hasPermission = (subject: string, action: string) => {
-    const permission = permissions.find((perm) => perm.subject === subject);
-    return permission ? permission.permission[action] : false;
-  };
+  // const hasPermission = (subject: string, action: string) => {
+  //   const permission = permissions.find((perm) => perm.subject === subject);
+  //   return permission ? permission.permission[action] : false;
+  // };
   // Define paths and their corresponding labels
   const paths = [
     { path: "/department", label: "Cơ quan đơn vị" },
@@ -268,7 +268,7 @@ const SideBar: React.FC<SideBarProps> = ({
             <List component="div" disablePadding>
               {paths.map(({ path, label }) => {
                 // Check permissions before rendering
-                if (hasPermission(path.replace("/", ""), "view")) {
+                // if (hasPermission(path.replace("/", ""), "view")) {
                   return (
                     <ListItemButton
                       key={path}
@@ -301,7 +301,7 @@ const SideBar: React.FC<SideBarProps> = ({
                       />
                     </ListItemButton>
                   );
-                }
+                // }
                 return null; // If no permission, return null
               })}
             </List>
