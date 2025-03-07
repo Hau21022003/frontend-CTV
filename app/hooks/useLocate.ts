@@ -1,0 +1,63 @@
+import { useState, useEffect } from 'react';
+import apiService from '../untils/api';
+import { useAuth } from './AuthContext';
+
+interface City {
+  key: string;
+  name: string;
+}
+interface District {
+  key: string;
+  name: string;
+}
+interface Ward {
+  key: string;
+  name: string;
+}
+
+const useLocate = () => {
+  const {isAuthenticated} = useAuth();
+  const [cities, setCities] = useState<City[]>([]);
+  const [districts, setDistricts] = useState<District[]>([]);
+  const [wards, setWards] = useState<Ward[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchCities = async () => {
+    try {
+      const response = await apiService.get<{ data: City[] }>('/province');
+      setCities(response.data.data);
+    } catch (err) {
+      setError('Error fetching cities');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDistrict = async (provinceId: string) => {
+    try {
+      const response = await apiService.get<{ data: District[] }>(`/province/district/${provinceId}`);
+      setDistricts(response.data.data);
+    } catch (err) {
+      setError('Error fetching districts');
+    }
+  };
+
+  const fetchWard = async (districtId: string) => {
+    try {
+      const response = await apiService.get<{ data: Ward[] }>(`/province/ward/${districtId}`);
+      setWards(response.data.data);
+    } catch (err) {
+      setError('Error fetching wards');
+    }
+  };
+
+  useEffect(() => {
+    fetchCities();
+  }, []);
+
+  return { cities, districts, loading, error, wards, fetchDistrict, fetchWard };
+};
+
+export default useLocate;
+
